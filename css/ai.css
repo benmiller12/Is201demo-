@@ -1,0 +1,83 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #000;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+h1 {
+  margin: 20px 0;
+  font-size: 3em;
+  color: #ffe81f;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.category, .cell {
+  background-color: #113355;
+  border: 2px solid #ffe81f;
+  padding: 20px;
+  font-size: 1.2em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.category {
+  background-color: #222;
+  font-weight: bold;
+  color: #ffe81f;
+  cursor: default;
+}
+
+.cell:empty {
+  background-color: #000;
+  cursor: default;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #111;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 700px;
+  text-align: center;
+  border: 2px solid #ffe81f;
+}
+
+.modal-content p {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  background: #ffe81f;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  color: #000;
+}
+
+.btn:hover {
+  background: #ffcc00;
+}

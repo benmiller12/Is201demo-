@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Star Wars Jeopardy</title>
+  <link rel="stylesheet" href="css/ai.css" />
+</head>
+<body>
+  <h1>Star Wars Jeopardy</h1>
+  <h2>Score: <span id="score">0</span></h2>
+
+  <div class="board" id="jeopardy-board"></div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <p id="question-text">Question goes here</p>
+      <input type="text" id="answer-input" placeholder="Your answer here..." />
+      <br><br>
+      <button class="btn" onclick="submitAnswer()">Submit</button>
+      <button class="btn" onclick="closeModal()">Skip</button>
+      <p id="feedback"></p>
+    </div>
+  </div>
+
+  <script>
+    const categories = ['The Force', 'Characters', 'Planets', 'Droids', 'Quotes'];
+    const scoreDisplay = document.getElementById('score');
+    let currentScore = 0;
+    let currentAnswer = '';
+    let currentValue = 0;
+
+    const questions = {
+      'The Force': [
+        { q: 'What are the two sides of the Force?', a: 'Light and Dark' },
+        { q: 'Who was the Chosen One said to bring balance to the Force?', a: 'Anakin Skywalker' },
+        { q: 'What is the Jedi Code?', a: 'There is no emotion, there is peace' },
+        { q: 'What do midi-chlorians measure?', a: 'Force sensitivity' },
+        { q: 'Which Jedi Master said “Luminous beings are we, not this crude matter”?', a: 'Yoda' }
+      ],
+      'Characters': [
+        { q: 'Who is Luke Skywalker’s father?', a: 'Darth Vader' },
+        { q: 'Which bounty hunter captured Han Solo?', a: 'Boba Fett' },
+        { q: 'What is the name of Yoda’s species?', a: 'Unknown' },
+        { q: 'Who trained Obi-Wan Kenobi?', a: 'Qui-Gon Jinn' },
+        { q: 'Which Sith Lord is known for the double-bladed lightsaber?', a: 'Darth Maul' }
+      ],
+      'Planets': [
+        { q: 'What desert planet is Luke from?', a: 'Tatooine' },
+        { q: 'Which planet was destroyed by the Death Star?', a: 'Alderaan' },
+        { q: 'Where did the Ewoks live?', a: 'Endor' },
+        { q: 'Where was the Jedi Temple located?', a: 'Coruscant' },
+        { q: 'What is the icy planet from The Empire Strikes Back?', a: 'Hoth' }
+      ],
+      'Droids': [
+        { q: 'Who says “I am C-3PO, human-cyborg relations”?', a: 'C-3PO' },
+        { q: 'Which droid only speaks in beeps?', a: 'R2-D2' },
+        { q: 'What type of droid is BB-8?', a: 'Astromech' },
+        { q: 'Which droid was built by Anakin Skywalker?', a: 'C-3PO' },
+        { q: 'Which assassin droid appears in The Mandalorian?', a: 'IG-11' }
+      ],
+      'Quotes': [
+        { q: '“I am your father.” — Who said it?', a: 'Darth Vader' },
+        { q: '“Help me, Obi-Wan Kenobi.” — Who said it?', a: 'Leia' },
+        { q: '“Do or do not. There is no try.” — Who said it?', a: 'Yoda' },
+        { q: '“I’ve got a bad feeling about this.” — Recurring quote in...?', a: 'Star Wars' },
+        { q: '“It’s a trap!” — Who said it?', a: 'Admiral Ackbar' }
+      ]
+    };
+
+    const board = document.getElementById('jeopardy-board');
+
+    function buildBoard() {
+      categories.forEach(category => {
+        const cell = document.createElement('div');
+        cell.className = 'category';
+        cell.innerText = category;
+        board.appendChild(cell);
+      });
+
+      for (let row = 0; row < 5; row++) {
+        categories.forEach(category => {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          const value = (row + 1) * 100;
+          cell.innerText = `$${value}`;
+          cell.addEventListener('click', function handler() {
+            const q = questions[category][row];
+            if (q) {
+              showModal(q.q, q.a, value);
+              cell.innerText = '';
+              cell.style.cursor = 'default';
+              cell.removeEventListener('click', handler);
+            }
+          });
+          board.appendChild(cell);
+        });
+      }
+    }
+
+    function showModal(question, answer, value) {
+      currentAnswer = answer;
+      currentValue = value;
+      document.getElementById('question-text').innerText = question;
+      document.getElementById('answer-input').value = '';
+      document.getElementById('feedback').innerText = '';
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function submitAnswer() {
+      const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
+      const correctAnswer = currentAnswer.trim().toLowerCase();
+      const feedback = document.getElementById('feedback');
+
+      if (userAnswer === correctAnswer) {
+        currentScore += currentValue;
+        feedback.innerText = '✅ Correct!';
+      } else {
+        feedback.innerText = `❌ Incorrect! Correct answer: ${currentAnswer}`;
+      }
+
+      scoreDisplay.innerText = currentScore;
+      setTimeout(closeModal, 2000);
+    }
+
+    buildBoard();
+  </script>
+</body>
+</html>
